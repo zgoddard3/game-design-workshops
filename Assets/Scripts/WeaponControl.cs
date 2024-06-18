@@ -11,12 +11,12 @@ public class WeaponControl : MonoBehaviour
     public UnityEvent onFire;
     private float _cooldown;
     private bool _ready;
-    private StarterAssetsInputs _input;
+    private AgentInput _input;
     
 
     void Start()
     {
-        _input = GetComponent<StarterAssetsInputs>();
+        _input = GetComponent<AgentInput>();
         _ready = true;
     }
 

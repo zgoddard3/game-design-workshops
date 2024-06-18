@@ -35,4 +35,8 @@ public class HumanInput : MonoBehaviour
     {
         _input.SprintInput(value.isPressed);
     }
+
+    public void OnFire(InputValue value) {
+        _input.FireInput(value.isPressed);
+    }
 }
