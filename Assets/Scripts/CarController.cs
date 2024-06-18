@@ -8,7 +8,7 @@ public class CarController : MonoBehaviour
     public float maxTorque;
     public List<WheelCollider> steeringWheels;
     public List<WheelCollider> driveWheels;
-    private StarterAssetsInputs _input;
+    private AgentInput _input;
 
     void Awake() {
         steeringWheels = new List<WheelCollider>();
@@ -18,7 +18,7 @@ public class CarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _input = GetComponent<StarterAssetsInputs>();
+        _input = GetComponent<AgentInput>();
         print(GetComponent<Rigidbody>().inertiaTensor);
     }
 
