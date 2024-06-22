@@ -7,7 +7,7 @@ namespace StarterAssets
 {
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-	[RequireComponent(typeof(PlayerInput))]
+	[RequireComponent(typeof(AgentInput))]
 #endif
 	public class FirstPersonController : MonoBehaviour
 	{
@@ -78,7 +78,7 @@ namespace StarterAssets
 			get
 			{
 				#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-				return _playerInput.currentControlScheme == "KeyboardMouse";
+				return _playerInput?.currentControlScheme == "KeyboardMouse";
 				#else
 				return false;
 				#endif
