@@ -17,14 +17,15 @@ public class ChasePlayer : AgentState
 
     public override AgentState Run() {
         Vector3 delta = player.transform.position - transform.position;
+        delta = transform.InverseTransformVector(delta);
         delta.y = 0f;
         if (delta.magnitude > 5f) {
-            _input.MoveInput(delta.normalized);
+            _input.MoveInput(new Vector2(delta.x, delta.z).normalized);
         } else {
-            _input.MoveInput(Vector3.zero);
+            _input.MoveInput(Vector2.zero);
         }
 
-        delta = transform.InverseTransformVector(delta);
+        
         float angle = Mathf.Atan2(delta.x, delta.z);
         _input.LookInput(Vector2.right*angle);
         
