@@ -10,7 +10,7 @@ public class RayBullet : MonoBehaviour
     public float speed;
     public float gravity;
     public LayerMask layerMask;
-    public UnityEvent OnHit;
+    public UnityEvent<GameObject> OnHit;
     private Vector3 velocity;
     
     void Start()
@@ -25,7 +25,7 @@ public class RayBullet : MonoBehaviour
         Physics.Raycast(transform.position, dp, out hit, dp.magnitude, layerMask);
 
         if (hit.collider != null) {
-            OnHit.Invoke();
+            OnHit.Invoke(hit.collider.gameObject);
         }
 
         transform.position += dp;

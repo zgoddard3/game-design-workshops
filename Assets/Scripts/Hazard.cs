@@ -6,11 +6,15 @@ public class Hazard : MonoBehaviour
 {
     public float damage;
 
+    public void ApplyDamage(GameObject go) {
+        go.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
+    }
+
     void OnCollisionEnter(Collision collision) {
         collision.gameObject.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
     }
 
     void OnTriggerEnter(Collider other) {
-        other.gameObject.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
+        ApplyDamage(other.gameObject);
     }
 }

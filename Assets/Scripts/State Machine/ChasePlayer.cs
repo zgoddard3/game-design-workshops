@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
-using StarterAssets;
 using UnityEngine;
 
 public class ChasePlayer : AgentState
 {
     private GameObject player;
+    public GameObject Player {
+        get { return player; }
+    }
     private AgentInput _input;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         player = GameObject.FindGameObjectWithTag("Player");
         _input = GetComponent<AgentInput>();
     }
 
-    public override AgentState Run() {
+    public override void Run() {
         Vector3 delta = player.transform.position - transform.position;
         delta = transform.InverseTransformVector(delta);
         delta.y = 0f;
@@ -28,7 +31,7 @@ public class ChasePlayer : AgentState
         
         float angle = Mathf.Atan2(delta.x, delta.z);
         _input.LookInput(Vector2.right*angle);
-        
-        return this;
+
+        _input.FireInput(true);
     }
 }
