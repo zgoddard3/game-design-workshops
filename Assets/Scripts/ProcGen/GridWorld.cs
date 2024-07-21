@@ -14,6 +14,8 @@ public class GridWorld : MonoBehaviour
     private HashSet<Tuple<int,int>> closedSet;
     public GameObject mazeCell;
 
+    public WaveCell[] waveCells;
+
     public enum Direction {
         NORTH,
         EAST,
@@ -98,6 +100,28 @@ public class GridWorld : MonoBehaviour
 
             yield return StartCoroutine(RandomDepthFirst(x,y));
         }
+    }
+
+    public void WaveFill() {
+
+        closedSet.Clear();
+
+        int i,j;
+        for (i = 0; i < width; i++) {
+            for (j = 0; j < length; j++) {
+                cells[i][j].Clear();
+                cells[i][j].MakeMazeCell();
+            }
+        }   
+
+        i = Range(0, width);
+        j = Range(0, length);
+
+        StartCoroutine(WaveFunctionCollapse());
+    }
+
+    private IEnumerator WaveFunctionCollapse() {
+        yield return new WaitUntil(() => shouldStep);
     }
 
     private List<Direction> Neighbors(int i, int j) {

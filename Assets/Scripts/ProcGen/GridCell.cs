@@ -1,13 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Direction = GridWorld.Direction;
+using Random = UnityEngine.Random;
 
 public class GridCell : MonoBehaviour
 {
     private GridWorld gridWorld;
     private GameObject obj;
+    private List<WaveCell> possibilities;
 
     // Start is called before the first frame update
     void Start()
@@ -48,5 +52,39 @@ public class GridCell : MonoBehaviour
                 Destroy(mazeCell.Find("West Wall").gameObject);
                 break;
         }
+    }
+
+    public void MakeWaveCell() {
+        obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        obj.transform.position = transform.position;
+        obj.transform.rotation = transform.rotation;
+        obj.transform.parent = transform;
+
+        possibilities.Clear();
+        possibilities.AddRange(gridWorld.waveCells);
+    }
+
+    public bool Constrain(GridCell neighbor) {
+        int l = possibilities.Count;
+        List<WaveCell> temp = new List<WaveCell>();
+        foreach (WaveCell waveCell1 in neighbor.possibilities) {
+            foreach (WaveCell waveCell2 in possibilities) {
+                if (waveCell2.adjacency.Contains(waveCell1)) {
+                    temp.Add(waveCell2);
+                }
+            }
+        }
+        possibilities = temp;
+        return l < possibilities.Count;
+    }
+
+    public void Collapse() {
+        int i = Random.Range(0, possibilities.Count);
+        WaveCell waveCell= possibilities[i];
+        possibilities.Clear();
+        possibilities.Add(waveCell);
+
+        Destroy(transform.GetChild(0).gameObject);
+        Instantiate(waveCell.obj, transform.position, transform.rotation, transform);
     }
 }
