@@ -92,36 +92,54 @@ public class GridWorld : MonoBehaviour
             Tuple<int,int> xy = new Tuple<int,int>(x,y);
             if (closedSet.Contains(xy)) {continue;}
 
+            yield return new WaitUntil(()=>shouldStep);
+
             cells[i][j].Connect(d);
             cells[x][y].Connect(opposites[d]);
             
             shouldStep = false;
-            yield return new WaitUntil(()=>shouldStep);
-
             yield return StartCoroutine(RandomDepthFirst(x,y));
         }
     }
 
     public void WaveFill() {
 
-        closedSet.Clear();
-
         int i,j;
         for (i = 0; i < width; i++) {
             for (j = 0; j < length; j++) {
                 cells[i][j].Clear();
-                cells[i][j].MakeMazeCell();
+                cells[i][j].MakeWaveCell();
             }
         }   
-
-        i = Range(0, width);
-        j = Range(0, length);
 
         StartCoroutine(WaveFunctionCollapse());
     }
 
     private IEnumerator WaveFunctionCollapse() {
-        yield return new WaitUntil(() => shouldStep);
+        for (int i = 0; i < width*length; i++) {
+            shouldStep = false;
+            yield return new WaitUntil(() => shouldStep);
+
+            Tuple<int,int> xy = FindMinEntropy();
+            int x = xy.Item1;
+            int y = xy.Item2;
+
+            cells[x][y].Collapse();
+
+            ConstrainNeighbors(x,y);
+        }
+        
+    }
+
+    private void ConstrainNeighbors(int i, int j) {
+        foreach (Direction d in Neighbors(i,j)) {
+            int x = i + directions[d].Item1;
+            int y = j + directions[d].Item2;
+
+            if (cells[x][y].Constrain(cells[i][j])) {
+                ConstrainNeighbors(x,y);
+            }
+        }
     }
 
     private List<Direction> Neighbors(int i, int j) {
@@ -138,6 +156,27 @@ public class GridWorld : MonoBehaviour
         }
 
         return neighbors;
+    }
+
+    private Tuple<int,int> FindMinEntropy() {
+        List<Tuple<int,int>> minCells = new List<Tuple<int, int>>(width*length);
+        int minEntropy = int.MaxValue;
+        int i,j;
+        for (i = 0; i < width; i++) {
+            for (j = 0; j < length; j++) {
+                int entropy = cells[i][j].Entropy();
+                if (entropy == 0) continue;
+                if (entropy < minEntropy) {
+                    minEntropy = entropy;
+                    minCells.Clear();
+                }
+                if (entropy == minEntropy) {
+                    minCells.Add(new Tuple<int,int>(i,j));
+                }
+            }
+        }
+        i = Range(0,minCells.Count);
+        return minCells[i];
     }
 
     private void Shuffle<T>(List<T> list) {

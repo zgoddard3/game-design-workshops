@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellName: Plains
   obj: {fileID: 4779966647638407212, guid: 8c72dc322846ddc4990ea6091fabc476, type: 3}
-  adjacency: []
+  adjacency:
+  - {fileID: 11400000}
+  - {fileID: 11400000, guid: 0b57474427739be48b32777226753ece, type: 2}
+  - {fileID: 11400000, guid: df9f316c1ae7cc14caef0412c0bae036, type: 2}

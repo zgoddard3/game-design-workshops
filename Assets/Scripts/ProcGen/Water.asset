@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c2aae9f5990b94ba523fbfb76f9442, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  cellName: Plains
-  obj: {fileID: 4779966647638407212, guid: 8c72dc322846ddc4990ea6091fabc476, type: 3}
-  adjacency: []
+  cellName: Water
+  obj: {fileID: 1328582696477397936, guid: 5b2176bfd53a1aa40a03e1d8fbc2ac68, type: 3}
+  adjacency:
+  - {fileID: 11400000, guid: 2bf5755ac8c037f4cb0aa9c1298d59a9, type: 2}
+  - {fileID: 11400000}

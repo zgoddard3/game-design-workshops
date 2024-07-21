@@ -12,12 +12,13 @@ public class GridCell : MonoBehaviour
     private GridWorld gridWorld;
     private GameObject obj;
     private List<WaveCell> possibilities;
+    private bool collapsed;
 
     // Start is called before the first frame update
     void Start()
     {
         gridWorld = transform.parent.GetComponent<GridWorld>();
-        
+        possibilities = new List<WaveCell>(gridWorld.waveCells.Length);
     }
 
     // Update is called once per frame
@@ -62,6 +63,8 @@ public class GridCell : MonoBehaviour
 
         possibilities.Clear();
         possibilities.AddRange(gridWorld.waveCells);
+
+        collapsed = false;
     }
 
     public bool Constrain(GridCell neighbor) {
@@ -86,5 +89,12 @@ public class GridCell : MonoBehaviour
 
         Destroy(transform.GetChild(0).gameObject);
         Instantiate(waveCell.obj, transform.position, transform.rotation, transform);
+
+        collapsed = true;
+    }
+
+    public int Entropy() {
+        if (collapsed) return 0;
+        return possibilities.Count;
     }
 }
